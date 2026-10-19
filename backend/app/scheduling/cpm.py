@@ -7,7 +7,7 @@ Las fechas reales se obtienen al final con el calendario.
 
 import heapq
 from collections import defaultdict
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from datetime import date
 from itertools import islice
@@ -103,6 +103,11 @@ def compute_schedule(
     )
 
 
+def check_acyclic(task_ids: Iterable[int], dependencies: Sequence[Dependency]) -> None:
+    """Lanza CyclicDependencyError si las dependencias forman un ciclo."""
+    _topological_order(task_ids, dependencies)
+
+
 def _index_tasks(tasks: Sequence[Task]) -> dict[int, Task]:
     task_by_id: dict[int, Task] = {}
     for task in tasks:
@@ -119,11 +124,10 @@ def _validate_dependencies(task_by_id: dict[int, Task], dependencies: Sequence[D
                 raise SchedulingError(f"La dependencia usa una tarea inexistente: {task_id}")
 
 
-def _topological_order(
-    task_by_id: dict[int, Task], dependencies: Sequence[Dependency]
-) -> list[int]:
+def _topological_order(task_ids: Iterable[int], dependencies: Sequence[Dependency]) -> list[int]:
     """Orden topológico determinista (por id). Lanza error si hay ciclo."""
-    indegree = dict.fromkeys(task_by_id, 0)
+    task_ids = list(task_ids)
+    indegree = dict.fromkeys(task_ids, 0)
     outgoing: dict[int, list[int]] = defaultdict(list)
     for dependency in dependencies:
         outgoing[dependency.predecessor_id].append(dependency.successor_id)
@@ -140,7 +144,7 @@ def _topological_order(
             if indegree[successor_id] == 0:
                 heapq.heappush(ready, successor_id)
 
-    if len(order) != len(task_by_id):
+    if len(order) != len(task_ids):
         remaining = {task_id for task_id, degree in indegree.items() if degree > 0}
         raise CyclicDependencyError(_cycle_members(remaining, dependencies))
     return order
