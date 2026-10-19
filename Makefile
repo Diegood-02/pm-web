@@ -15,4 +15,4 @@ lint:
 	cd frontend && npm run lint
 
 migrate:
-	@echo "Las migraciones de Alembic se configuran en la Fase 2."
+	docker compose exec api alembic upgrade head
