@@ -32,6 +32,9 @@ services:
 
   web:
     build: ./frontend
+    environment:
+      # El navegador llama a la API desde el host, no desde la red interna de Docker.
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:8000/api/v1}
     ports:
       - "5173:5173"
     volumes:

@@ -6,8 +6,8 @@
 |------|-------------|--------|
 | 0 | Repositorio y estructura | Aprobada y publicada |
 | 1 | Motor de programación (CPM) | Aprobada y publicada |
-| 2 | Backend: modelo de datos y API | En revisión (código y pruebas listos; pendiente de commit) |
-| 3 | Frontend MVP | Pendiente |
+| 2 | Backend: modelo de datos y API | Aprobada y publicada |
+| 3 | Frontend MVP | En revisión (código y pruebas listos; pendiente de commit) |
 | 4 | Costos y valor ganado (EVM) | Pendiente |
 | 5 | Reportes y exportación | Pendiente |
 | 6 | Piloto y endurecimiento | Pendiente |
@@ -52,5 +52,25 @@
 - [x] `ruff`, `ruff format`, `mypy` (estricto) sin errores.
 - [x] Prueba de humo en el contenedor `api`: login, perfil, proyecto, tarea y cronograma.
 - [x] Decisiones en `docs/adr/0002-persistencia-y-autorizacion.md`.
-- [ ] Commits propuestos y aprobados.
+- [x] Commits aprobados y publicados en `feature/mvp-pm-web`.
 - [ ] Comentarios de tareas: modelo listo, sin endpoints (pendiente de decisión).
+
+## Fase 3. Detalle
+
+- [x] Login y sesión (`/login`), con renovación de token y cierre de sesión.
+- [x] Lista de proyectos y creación de proyectos (PM y admin).
+- [x] Gestión de usuarios para admin: alta, cambio de rol y activación.
+- [x] Vista de proyecto con pestañas Tareas, Gantt, Recursos y Línea base (navegación con teclado).
+- [x] Tareas: tabla con WBS editable, subir, bajar, sangría, eliminar y hitos.
+- [x] Gantt con `frappe-gantt`: ruta crítica en rojo y tabla de dependencias con su tipo exacto.
+- [x] Dependencias: crear y eliminar desde la pestaña Gantt.
+- [x] Recursos y asignaciones con porcentaje de dedicación.
+- [x] Línea base: guardar (PM) y comparar contra el plan actual.
+- [x] Actualización: recarga cada 15 segundos y después de cada cambio propio.
+- [x] Concurrencia: 409 muestra aviso y recarga; no sobrescribe en silencio.
+- [x] Pruebas con Vitest: 27 en verde (cliente API, login, pestañas, tabla de tareas, Gantt, permisos y conflicto 409).
+- [x] `tsc`, ESLint, Prettier y build de producción sin errores.
+- [x] Decisiones en `docs/adr/0003-frontend-y-actualizacion.md`.
+- [x] Docker Compose con el frontend verificado: `web` sirve la app (HTTP 200) con las dependencias nuevas.
+- [ ] Vulnerabilidades de herramientas de desarrollo (`npm audit`): pendiente de decisión.
+- [ ] Commits propuestos y aprobados.
