@@ -29,6 +29,7 @@ export function ResourcesPanel({
   const [error, setError] = useState<string | null>(null);
   const [newName, setNewName] = useState("");
   const [newMaxUnits, setNewMaxUnits] = useState("100");
+  const [newRate, setNewRate] = useState("0");
   const [taskId, setTaskId] = useState("");
   const [resourceId, setResourceId] = useState("");
   const [units, setUnits] = useState("100");
@@ -49,9 +50,14 @@ export function ResourcesPanel({
   async function handleCreateResource(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     await run(async () => {
-      await api.createResource(projectId, { name: newName.trim(), max_units: Number(newMaxUnits) });
+      await api.createResource(projectId, {
+        name: newName.trim(),
+        max_units: Number(newMaxUnits),
+        hourly_rate: Number(newRate),
+      });
       setNewName("");
       setNewMaxUnits("100");
+      setNewRate("0");
     }, "No se pudo crear el recurso.");
   }
 
@@ -80,6 +86,7 @@ export function ResourcesPanel({
           <tr>
             <th scope="col">Nombre</th>
             <th scope="col">Capacidad máxima (%)</th>
+            <th scope="col">Tarifa por hora</th>
             {canEdit && <th scope="col">Acción</th>}
           </tr>
         </thead>
@@ -88,6 +95,21 @@ export function ResourcesPanel({
             <tr key={resource.id}>
               <td>{resource.name}</td>
               <td>{resource.max_units}</td>
+              <td>
+                {canEdit ? (
+                  <RateInput
+                    resource={resource}
+                    onSave={(rate) =>
+                      run(
+                        () => api.updateResource(projectId, resource.id, { hourly_rate: rate }),
+                        "No se pudo guardar la tarifa.",
+                      )
+                    }
+                  />
+                ) : (
+                  resource.hourly_rate
+                )}
+              </td>
               {canEdit && (
                 <td>
                   <button
@@ -108,7 +130,7 @@ export function ResourcesPanel({
           ))}
           {resources.length === 0 && (
             <tr>
-              <td colSpan={canEdit ? 3 : 2}>No hay recursos todavía.</td>
+              <td colSpan={canEdit ? 4 : 3}>No hay recursos todavía.</td>
             </tr>
           )}
         </tbody>
@@ -183,6 +205,18 @@ export function ResourcesPanel({
                 onChange={(event) => setNewMaxUnits(event.target.value)}
               />
             </div>
+            <div className="field">
+              <label htmlFor="resource-rate">Tarifa por hora</label>
+              <input
+                id="resource-rate"
+                type="number"
+                min={0}
+                step="0.01"
+                className="narrow"
+                value={newRate}
+                onChange={(event) => setNewRate(event.target.value)}
+              />
+            </div>
             <button type="submit">Agregar recurso</button>
           </form>
 
@@ -237,5 +271,42 @@ export function ResourcesPanel({
         </div>
       )}
     </section>
+  );
+}
+
+function RateInput({
+  resource,
+  onSave,
+}: {
+  resource: Resource;
+  onSave: (rate: number) => Promise<void>;
+}) {
+  const [draft, setDraft] = useState(String(resource.hourly_rate));
+
+  function commit() {
+    const value = Number(draft);
+    if (draft.trim() === "" || !Number.isFinite(value) || value < 0) {
+      setDraft(String(resource.hourly_rate));
+      return;
+    }
+    if (value !== resource.hourly_rate) void onSave(value);
+  }
+
+  return (
+    <>
+      <label className="sr-only" htmlFor={`rate-${resource.id}`}>
+        Tarifa por hora de {resource.name}
+      </label>
+      <input
+        id={`rate-${resource.id}`}
+        type="number"
+        min={0}
+        step="0.01"
+        className="narrow"
+        value={draft}
+        onChange={(event) => setDraft(event.target.value)}
+        onBlur={commit}
+      />
+    </>
   );
 }

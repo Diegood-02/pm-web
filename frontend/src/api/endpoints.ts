@@ -2,6 +2,7 @@ import { request } from "./client";
 import type {
   Assignment,
   BaselineSummary,
+  CostReport,
   BaselineVariance,
   Dependency,
   DependencyType,
@@ -47,7 +48,15 @@ export const api = {
   updateTask: (
     projectId: number,
     taskId: number,
-    body: { version: number; name?: string; duration_days?: number; is_milestone?: boolean },
+    body: {
+      version: number;
+      name?: string;
+      duration_days?: number;
+      is_milestone?: boolean;
+      fixed_cost?: number;
+      actual_cost?: number;
+      percent_complete?: number;
+    },
   ) => request<Task>(`/projects/${projectId}/tasks/${taskId}`, { method: "PATCH", body }),
   moveTask: (
     projectId: number,
@@ -71,8 +80,12 @@ export const api = {
     request<void>(`/projects/${projectId}/dependencies/${dependencyId}`, { method: "DELETE" }),
 
   resources: (projectId: number) => request<Resource[]>(`/projects/${projectId}/resources`),
-  createResource: (projectId: number, body: { name: string; max_units: number }) =>
-    request<Resource>(`/projects/${projectId}/resources`, { method: "POST", body }),
+  createResource: (
+    projectId: number,
+    body: { name: string; max_units: number; hourly_rate: number },
+  ) => request<Resource>(`/projects/${projectId}/resources`, { method: "POST", body }),
+  updateResource: (projectId: number, resourceId: number, body: { hourly_rate: number }) =>
+    request<Resource>(`/projects/${projectId}/resources/${resourceId}`, { method: "PATCH", body }),
   deleteResource: (projectId: number, resourceId: number) =>
     request<void>(`/projects/${projectId}/resources/${resourceId}`, { method: "DELETE" }),
 
@@ -90,6 +103,8 @@ export const api = {
     request<void>(`/projects/${projectId}/assignments/${assignmentId}`, { method: "DELETE" }),
 
   schedule: (projectId: number) => request<Schedule>(`/projects/${projectId}/schedule`),
+  costs: (projectId: number, statusDate: string) =>
+    request<CostReport>(`/projects/${projectId}/costs?status_date=${statusDate}`),
 
   baselines: (projectId: number) => request<BaselineSummary[]>(`/projects/${projectId}/baselines`),
   createBaseline: (projectId: number, name: string) =>

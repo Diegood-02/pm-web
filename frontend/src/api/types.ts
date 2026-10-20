@@ -48,6 +48,9 @@ export interface Task {
   name: string;
   duration_days: number;
   is_milestone: boolean;
+  fixed_cost: number;
+  actual_cost: number;
+  percent_complete: number;
   version: number;
 }
 
@@ -63,6 +66,7 @@ export interface Resource {
   id: number;
   name: string;
   max_units: number;
+  hourly_rate: number;
 }
 
 export interface Assignment {
@@ -116,4 +120,37 @@ export interface BaselineVariance {
   current_finish: string | null;
   start_variance_days: number | null;
   finish_variance_days: number | null;
+}
+
+export interface CostTask {
+  task_id: number;
+  wbs: string;
+  name: string;
+  budget: number;
+  percent_complete: number;
+  fixed_cost: number;
+  planned_value: number;
+  earned_value: number;
+  actual_cost: number;
+}
+
+export interface CostSummary {
+  bac: number;
+  pv: number;
+  ev: number;
+  ac: number;
+  cv: number;
+  sv: number;
+  cpi: number | null;
+  spi: number | null;
+  threshold: number;
+  cpi_alert: boolean;
+  spi_alert: boolean;
+}
+
+export interface CostReport {
+  project_id: number;
+  status_date: string;
+  summary: CostSummary;
+  tasks: CostTask[];
 }

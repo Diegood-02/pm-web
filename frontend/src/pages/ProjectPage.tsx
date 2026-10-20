@@ -5,6 +5,7 @@ import { ApiError } from "../api/client";
 import { api } from "../api/endpoints";
 import { useAuth } from "../auth/AuthContext";
 import { BaselinePanel } from "../components/BaselinePanel";
+import { CostsPanel } from "../components/CostsPanel";
 import { DependenciesPanel } from "../components/DependenciesPanel";
 import { GanttView } from "../components/GanttView";
 import { ResourcesPanel } from "../components/ResourcesPanel";
@@ -19,6 +20,7 @@ const TABS: TabDefinition[] = [
   { id: "tareas", label: "Tareas" },
   { id: "gantt", label: "Gantt" },
   { id: "recursos", label: "Recursos" },
+  { id: "costos", label: "Costos" },
   { id: "linea-base", label: "Línea base" },
 ];
 
@@ -160,6 +162,16 @@ export function ProjectPage() {
             assignments={assignments}
             canEdit={canEdit}
             onChanged={refresh}
+          />
+        )}
+
+        {selectedTab === "costos" && (
+          <CostsPanel
+            projectId={projectId}
+            tasks={tasks}
+            canEdit={canEdit}
+            stamp={data}
+            onAction={run}
           />
         )}
 

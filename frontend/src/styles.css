@@ -259,6 +259,47 @@ td {
   max-width: 24rem;
 }
 
+.alert {
+  border: 2px solid var(--color-error);
+  background: var(--color-critical-row);
+  color: var(--color-text);
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin: 0.75rem 0;
+}
+
+.cost-cards {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  margin: 1rem 0;
+}
+
+.cost-cards div {
+  padding: 0.75rem;
+  background: var(--color-surface);
+  border-radius: 6px;
+}
+
+.cost-cards dt {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.cost-cards dd {
+  margin: 0.25rem 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.cost-cards .bad dd {
+  color: var(--color-error);
+}
+
+.money {
+  width: 8rem;
+}
+
 .project-list li {
   margin: 0.5rem 0;
 }

@@ -40,6 +40,9 @@ export const tasks: Task[] = [
     name: "Diseño",
     duration_days: 3,
     is_milestone: false,
+    fixed_cost: 0,
+    actual_cost: 0,
+    percent_complete: 0,
     version: 2,
   },
   {
@@ -50,6 +53,9 @@ export const tasks: Task[] = [
     name: "Construcción",
     duration_days: 4,
     is_milestone: false,
+    fixed_cost: 0,
+    actual_cost: 0,
+    percent_complete: 0,
     version: 1,
   },
 ];
