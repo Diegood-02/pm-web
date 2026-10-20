@@ -7,8 +7,8 @@
 | 0 | Repositorio y estructura | Aprobada y publicada |
 | 1 | Motor de programación (CPM) | Aprobada y publicada |
 | 2 | Backend: modelo de datos y API | Aprobada y publicada |
-| 3 | Frontend MVP | En revisión (código y pruebas listos; pendiente de commit) |
-| 4 | Costos y valor ganado (EVM) | Pendiente |
+| 3 | Frontend MVP | Aprobada y publicada |
+| 4 | Costos y valor ganado (EVM) | En revisión (código y pruebas listos; pendiente de commit) |
 | 5 | Reportes y exportación | Pendiente |
 | 6 | Piloto y endurecimiento | Pendiente |
 
@@ -73,4 +73,17 @@
 - [x] Decisiones en `docs/adr/0003-frontend-y-actualizacion.md`.
 - [x] Docker Compose con el frontend verificado: `web` sirve la app (HTTP 200) con las dependencias nuevas.
 - [ ] Vulnerabilidades de herramientas de desarrollo (`npm audit`): pendiente de decisión.
+- [ ] Commits propuestos y aprobados.
+
+## Fase 4. Detalle
+
+- [x] Costos por recurso (tarifa por hora) y costos fijos por tarea.
+- [x] Avance (%) y costo real por tarea, con control de versión.
+- [x] PV, EV, AC, CV, SV, CPI y SPI a una fecha de corte (`GET /projects/{id}/costs?status_date=`).
+- [x] Alerta visual cuando CPI o SPI están por debajo de 0.9, en el resumen y en la pestaña Costos.
+- [x] Línea base guarda el presupuesto por tarea (pendiente desde la Fase 2).
+- [x] Pruebas con valores calculados a mano: 11 de funciones puras (`tests/costing`) y 6 de API (`tests/api/test_costs.py`).
+- [x] Pruebas de interfaz: 5 del panel de costos; 32 en total con Vitest.
+- [x] Migraciones `201d94aaf339` y `0b0f61ca6e70` aplicadas en la base local de desarrollo.
+- [x] Decisiones en `docs/adr/0004-costos-y-valor-ganado.md`.
 - [ ] Commits propuestos y aprobados.
