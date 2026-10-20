@@ -5,6 +5,7 @@ aquí solo se describe la forma de los datos.
 """
 
 from datetime import date, datetime
+from decimal import Decimal
 from enum import StrEnum
 from typing import Any
 
@@ -18,6 +19,7 @@ from sqlalchemy import (
     Float,
     ForeignKey,
     Integer,
+    Numeric,
     String,
     Text,
     UniqueConstraint,
@@ -126,6 +128,8 @@ class Task(TimestampMixin, Base):
     __table_args__ = (
         CheckConstraint("duration_days >= 0", name="duration_non_negative"),
         CheckConstraint("NOT is_milestone OR duration_days = 0", name="milestone_zero_duration"),
+        CheckConstraint("percent_complete BETWEEN 0 AND 100", name="percent_range"),
+        CheckConstraint("fixed_cost >= 0 AND actual_cost >= 0", name="costs_non_negative"),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -140,6 +144,14 @@ class Task(TimestampMixin, Base):
     name: Mapped[str] = mapped_column(String(200))
     duration_days: Mapped[int] = mapped_column(Integer, default=0)
     is_milestone: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    # Costos y avance (Fase 4). El costo real se captura por tarea.
+    fixed_cost: Mapped[Decimal] = mapped_column(
+        Numeric(14, 2), default=Decimal("0"), server_default="0"
+    )
+    actual_cost: Mapped[Decimal] = mapped_column(
+        Numeric(14, 2), default=Decimal("0"), server_default="0"
+    )
+    percent_complete: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     version: Mapped[int] = mapped_column(Integer, default=1, server_default="1")
 
 
@@ -174,6 +186,9 @@ class Resource(TimestampMixin, Base):
     )
     name: Mapped[str] = mapped_column(String(200))
     max_units: Mapped[int] = mapped_column(Integer, default=100, server_default="100")
+    hourly_rate: Mapped[Decimal] = mapped_column(
+        Numeric(12, 2), default=Decimal("0"), server_default="0"
+    )
 
 
 class Assignment(Base):
@@ -229,6 +244,9 @@ class BaselineTask(Base):
     finish_offset: Mapped[int] = mapped_column(Integer)
     start_date: Mapped[date] = mapped_column(Date)
     finish_date: Mapped[date] = mapped_column(Date)
+    budget: Mapped[Decimal] = mapped_column(
+        Numeric(14, 2), default=Decimal("0"), server_default="0"
+    )
 
 
 class Comment(Base):

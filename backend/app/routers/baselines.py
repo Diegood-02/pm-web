@@ -1,5 +1,7 @@
 """Líneas base: copia del cronograma en un momento y comparación contra el plan actual."""
 
+from datetime import date
+
 from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import select
 
@@ -12,6 +14,7 @@ from app.schemas import (
     BaselineVariance,
 )
 from app.services.audit import record
+from app.services.costs import task_cost_rows
 from app.services.scheduling import list_task_rows, load_schedule, task_wbs_codes
 
 router = APIRouter(prefix="/projects/{project_id}/baselines", tags=["línea base"])
@@ -38,6 +41,9 @@ def create_baseline(
     schedule = load_schedule(db, project)
     rows = list_task_rows(db, project.id)
     codes = task_wbs_codes(rows)
+    budgets = {
+        item.row.id: item.evm.budget for item in task_cost_rows(db, project, schedule, date.today())
+    }
 
     baseline = Baseline(
         project_id=project.id,
@@ -59,6 +65,7 @@ def create_baseline(
                 finish_offset=entry.early_finish,
                 start_date=entry.start_date,
                 finish_date=entry.finish_date,
+                budget=budgets[row.id],
             )
         )
     db.add(baseline)

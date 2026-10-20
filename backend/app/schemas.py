@@ -1,7 +1,8 @@
 """Esquemas Pydantic v2 de entrada y salida de la API."""
 
 from datetime import date, datetime
-from typing import Any
+from decimal import Decimal
+from typing import Annotated, Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import (
@@ -9,6 +10,7 @@ from pydantic import (
     ConfigDict,
     EmailStr,
     Field,
+    PlainSerializer,
     field_validator,
     model_validator,
 )
@@ -17,6 +19,12 @@ from app.models import Role
 from app.scheduling import DependencyType
 
 NAME = Field(min_length=1, max_length=200)
+# Montos: se reciben y se devuelven como número; internamente son Decimal.
+Money = Annotated[
+    Decimal,
+    Field(ge=0, le=Decimal("1000000000000")),
+    PlainSerializer(float, return_type=float, when_used="json"),
+]
 PASSWORD = Field(min_length=12, max_length=256)
 
 
@@ -168,6 +176,7 @@ class TaskCreate(BaseModel):
     duration_days: int = Field(default=0, ge=0, le=100_000)
     is_milestone: bool = False
     parent_id: int | None = None
+    fixed_cost: Money = Decimal("0")
 
     @model_validator(mode="after")
     def _milestone_has_no_duration(self) -> "TaskCreate":
@@ -181,6 +190,9 @@ class TaskUpdate(BaseModel):
     name: str | None = Field(default=None, min_length=1, max_length=200)
     duration_days: int | None = Field(default=None, ge=0, le=100_000)
     is_milestone: bool | None = None
+    fixed_cost: Money | None = None
+    actual_cost: Money | None = None
+    percent_complete: int | None = Field(default=None, ge=0, le=100)
 
 
 class TaskMove(BaseModel):
@@ -199,6 +211,9 @@ class TaskOut(_Out):
     name: str
     duration_days: int
     is_milestone: bool
+    fixed_cost: Money
+    actual_cost: Money
+    percent_complete: int
     version: int
 
 
@@ -232,17 +247,20 @@ class DependencyOut(_Out):
 class ResourceCreate(BaseModel):
     name: str = NAME
     max_units: int = Field(default=100, ge=1, le=1000)
+    hourly_rate: Money = Decimal("0")
 
 
 class ResourceUpdate(BaseModel):
     name: str | None = Field(default=None, min_length=1, max_length=200)
     max_units: int | None = Field(default=None, ge=1, le=1000)
+    hourly_rate: Money | None = None
 
 
 class ResourceOut(_Out):
     id: int
     name: str
     max_units: int
+    hourly_rate: Money
 
 
 class AssignmentCreate(BaseModel):
@@ -282,6 +300,7 @@ class BaselineTaskOut(_Out):
     finish_offset: int
     start_date: date
     finish_date: date
+    budget: Money
 
 
 class BaselineDetail(BaselineSummary):
@@ -329,6 +348,42 @@ class ScheduleOut(BaseModel):
 
 
 # --- Auditoría ------------------------------------------------------------------------
+
+
+# --- Costos y valor ganado ------------------------------------------------------------
+
+
+class CostTaskOut(BaseModel):
+    task_id: int
+    wbs: str
+    name: str
+    budget: Money
+    percent_complete: int
+    fixed_cost: Money
+    planned_value: Money
+    earned_value: Money
+    actual_cost: Money
+
+
+class CostSummaryOut(BaseModel):
+    bac: Money
+    pv: Money
+    ev: Money
+    ac: Money
+    cv: float
+    sv: float
+    cpi: float | None
+    spi: float | None
+    threshold: float
+    cpi_alert: bool
+    spi_alert: bool
+
+
+class CostReportOut(BaseModel):
+    project_id: int
+    status_date: date
+    summary: CostSummaryOut
+    tasks: list[CostTaskOut]
 
 
 class AuditLogOut(_Out):

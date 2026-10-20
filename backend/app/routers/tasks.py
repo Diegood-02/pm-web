@@ -30,6 +30,9 @@ def _task_out(task: Task, wbs: str) -> TaskOut:
         name=task.name,
         duration_days=task.duration_days,
         is_milestone=task.is_milestone,
+        fixed_cost=task.fixed_cost,
+        actual_cost=task.actual_cost,
+        percent_complete=task.percent_complete,
         version=task.version,
     )
 
@@ -77,6 +80,7 @@ def create_task(
         name=body.name,
         duration_days=0 if body.is_milestone else body.duration_days,
         is_milestone=body.is_milestone,
+        fixed_cost=body.fixed_cost,
     )
     db.add(task)
     db.flush()
@@ -111,6 +115,9 @@ def update_task(
         ("name", body.name),
         ("duration_days", body.duration_days),
         ("is_milestone", body.is_milestone),
+        ("fixed_cost", body.fixed_cost),
+        ("actual_cost", body.actual_cost),
+        ("percent_complete", body.percent_complete),
     ):
         if value is not None and getattr(task, field) != value:
             changes[field] = value

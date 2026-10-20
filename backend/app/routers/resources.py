@@ -38,7 +38,12 @@ def list_resources(project: ProjectReader, db: DbSession) -> list[Resource]:
 def create_resource(
     body: ResourceCreate, project: ProjectWriter, user: CurrentUser, db: DbSession
 ) -> Resource:
-    resource = Resource(project_id=project.id, name=body.name, max_units=body.max_units)
+    resource = Resource(
+        project_id=project.id,
+        name=body.name,
+        max_units=body.max_units,
+        hourly_rate=body.hourly_rate,
+    )
     db.add(resource)
     try:
         db.flush()
@@ -54,7 +59,7 @@ def create_resource(
         action="create",
         entity="resource",
         entity_id=resource.id,
-        changes={"name": body.name, "max_units": body.max_units},
+        changes={"name": body.name, "max_units": body.max_units, "hourly_rate": body.hourly_rate},
     )
     db.commit()
     db.refresh(resource)

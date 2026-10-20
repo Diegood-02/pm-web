@@ -7,7 +7,17 @@ from sqlalchemy.exc import IntegrityError
 
 from app.config import get_settings
 from app.routers import audit as audit_router
-from app.routers import auth, baselines, dependencies, projects, resources, schedule, tasks, users
+from app.routers import (
+    auth,
+    baselines,
+    costs,
+    dependencies,
+    projects,
+    resources,
+    schedule,
+    tasks,
+    users,
+)
 from app.scheduling import SchedulingError
 
 API_PREFIX = "/api/v1"
@@ -53,6 +63,7 @@ for router in (
     resources.router,
     baselines.router,
     schedule.router,
+    costs.router,
     audit_router.router,
 ):
     app.include_router(router, prefix=API_PREFIX)
