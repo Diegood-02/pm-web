@@ -1,0 +1,275 @@
+/* Tokens de color. Todos los pares texto/fondo superan el contraste AA (4.5:1). */
+:root {
+  --color-text: #1f2937;
+  --color-muted: #4b5563;
+  --color-bg: #ffffff;
+  --color-surface: #f3f4f6;
+  --color-border: #9ca3af;
+  --color-primary: #1d4ed8;
+  --color-primary-text: #ffffff;
+  --color-error: #b42318;
+  --color-notice: #065f46;
+  --color-critical: #b42318;
+  --color-critical-row: #fef2f2;
+  --color-late-row: #fffbeb;
+  --focus-ring: #1d4ed8;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+main,
+.login {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.app-header .brand {
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.app-header nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.app-header .session {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+button,
+input,
+select {
+  font: inherit;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+button {
+  cursor: pointer;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  border-color: var(--color-primary);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.app-header button {
+  background: transparent;
+  color: var(--color-primary);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.field.checkbox {
+  flex-direction: row;
+  align-items: center;
+}
+
+.narrow {
+  width: 6rem;
+}
+
+.error {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+.notice {
+  color: var(--color-notice);
+  font-weight: 600;
+}
+
+.muted {
+  color: var(--color-muted);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75rem 0;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--color-surface);
+  vertical-align: middle;
+}
+
+.task-table td input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.task-table td input.narrow {
+  width: 6rem;
+}
+
+.task-table .actions {
+  white-space: nowrap;
+}
+
+.task-table .actions button {
+  margin-right: 0.25rem;
+}
+
+.critical-row {
+  background: var(--color-critical-row);
+}
+
+.late-row {
+  background: var(--color-late-row);
+}
+
+.summary {
+  color: var(--color-muted);
+}
+
+.tablist {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 2px solid var(--color-surface);
+  margin-top: 1rem;
+}
+
+.tab {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+}
+
+.tab.selected {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  font-weight: 700;
+}
+
+.tabpanel {
+  padding-top: 1rem;
+}
+
+.inline-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 28rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--color-surface);
+  border-radius: 6px;
+}
+
+.forms {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+}
+
+.gantt-canvas {
+  overflow-x: auto;
+  margin: 0.5rem 0 1.5rem;
+  min-height: 6rem;
+}
+
+/* Clase que frappe-gantt aplica a las tareas críticas (ver GanttView). */
+.gantt-canvas .critical .bar {
+  fill: var(--color-critical);
+}
+
+.gantt-canvas .critical .bar-progress {
+  fill: #7f1d1d;
+}
+
+.login {
+  max-width: 24rem;
+}
+
+.project-list li {
+  margin: 0.5rem 0;
+}
+
+@media (max-width: 640px) {
+  main,
+  .login {
+    padding: 0.75rem;
+  }
+
+  .app-header .session {
+    margin-left: 0;
+  }
+}
