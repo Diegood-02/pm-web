@@ -6,8 +6,16 @@ requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115",
     "uvicorn[standard]>=0.30",
-    "pydantic>=2.7",
+    "pydantic[email]>=2.7",
     "pydantic-settings>=2.4",
+    "sqlalchemy>=2.0.35",
+    "alembic>=1.13",
+    "psycopg[binary]>=3.2",
+    "argon2-cffi>=23.1",
+    "pyjwt>=2.9",
+    "openpyxl>=3.1",
+    "reportlab>=4.2",
+    "jsonschema>=4.23",
 ]
 
 [project.optional-dependencies]
@@ -25,9 +33,14 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 include = ["app*"]
 
+[tool.setuptools.package-data]
+app = ["exports/*.json"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+# Las migraciones las genera Alembic y no se editan a mano para cumplir estilo.
+extend-exclude = ["alembic/versions"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM"]
@@ -37,5 +50,11 @@ python_version = "3.12"
 strict = true
 files = ["app", "tests"]
 
+[[tool.mypy.overrides]]
+# Estas librerías no traen tipos; se confían sus firmas documentadas.
+module = ["openpyxl", "openpyxl.*", "reportlab", "reportlab.*", "jsonschema", "jsonschema.*"]
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
