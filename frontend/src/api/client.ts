@@ -85,7 +85,8 @@ export interface RequestOptions {
   auth?: boolean;
 }
 
-export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
+/** Hace la petición con el token actual y reintenta una vez si hace falta renovarlo. */
+async function sendAuthorized(path: string, options: RequestOptions): Promise<Response> {
   const { method = "GET", body, auth = true } = options;
 
   const send = (): Promise<Response> => {
@@ -104,6 +105,11 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
   if (response.status === 401 && auth && (await refreshAccessToken())) {
     response = await send();
   }
+  return response;
+}
+
+export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
+  const response = await sendAuthorized(path, options);
   if (response.status === 204) return undefined as T;
 
   const payload: unknown = await response.json().catch(() => null);
@@ -111,4 +117,24 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
     throw new ApiError(response.status, messageFromBody(payload, "No se pudo completar la acción"));
   }
   return payload as T;
+}
+
+/** Descarga un archivo del servidor (CSV, XLSX, PDF, JSON) con la sesión actual. */
+export async function downloadFile(path: string, fallbackName: string): Promise<void> {
+  const response = await sendAuthorized(path, { method: "GET" });
+  if (!response.ok) {
+    const payload: unknown = await response.json().catch(() => null);
+    throw new ApiError(response.status, messageFromBody(payload, "No se pudo generar el archivo"));
+  }
+  const blob = await response.blob();
+  const disposition = response.headers.get("Content-Disposition") ?? "";
+  const match = /filename="([^"]+)"/.exec(disposition);
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = match?.[1] ?? fallbackName;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }

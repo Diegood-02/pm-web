@@ -314,3 +314,10 @@ td {
     margin-left: 0;
   }
 }
+
+.export-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}

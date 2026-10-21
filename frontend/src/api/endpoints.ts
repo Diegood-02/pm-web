@@ -29,6 +29,8 @@ export const api = {
     request<User>(`/users/${id}`, { method: "PATCH", body }),
 
   projects: () => request<Project[]>("/projects"),
+  importProject: (document: unknown) =>
+    request<Project>("/projects/import", { method: "POST", body: document }),
   createProject: (body: { name: string; start_date: string }) =>
     request<Project>("/projects", { method: "POST", body }),
   project: (id: number) => request<Project>(`/projects/${id}`),
