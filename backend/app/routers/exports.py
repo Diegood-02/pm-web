@@ -5,6 +5,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Response, status
 
+from app.config import get_settings
 from app.deps import CurrentUser, DbSession, ProjectReader
 from app.exports.project_json import validate_document
 from app.exports.schedule import to_csv, to_xlsx
@@ -58,6 +59,9 @@ def import_project(body: dict[str, Any], user: CurrentUser, db: DbSession) -> An
             status.HTTP_403_FORBIDDEN, "Solo un project manager o admin importa proyectos"
         )
     errors = validate_document(body)
+    cap = get_settings().max_tasks_per_project
+    if isinstance(body.get("tasks"), list) and len(body["tasks"]) > cap:
+        errors.append(f"tasks: el proyecto excede el límite de {cap} tareas")
     if errors:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, detail=errors)
     return import_document(db, user, body)

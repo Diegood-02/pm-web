@@ -5,6 +5,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import func, select
 
+from app.config import get_settings
 from app.deps import CurrentUser, DbSession, ProjectReader, ProjectWriter, get_task_in_project
 from app.models import Task
 from app.schemas import TaskCreate, TaskMove, TaskOut, TaskUpdate
@@ -65,6 +66,15 @@ def create_task(
     body: TaskCreate, project: ProjectWriter, user: CurrentUser, db: DbSession
 ) -> TaskOut:
     _require_parent(db, project.id, body.parent_id)
+    cap = get_settings().max_tasks_per_project
+    total = (
+        db.scalar(select(func.count()).select_from(Task).where(Task.project_id == project.id)) or 0
+    )
+    if total >= cap:
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            f"El proyecto alcanzó el límite de {cap} tareas",
+        )
     next_position = (
         db.scalar(
             select(func.count())
