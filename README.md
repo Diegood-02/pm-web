@@ -2,7 +2,7 @@
 
 Aplicación web multiusuario de gestión de proyectos para equipos, enfocada en el rol de Project Manager y en buenas prácticas del PMBOK.
 
-Estado: **Fase 0 (repositorio y estructura)**. Ver [docs/PROGRESO.md](docs/PROGRESO.md).
+Estado: **Fase 6 (piloto y endurecimiento)**. Ver [docs/PROGRESO.md](docs/PROGRESO.md).
 
 ## Stack
 
@@ -41,6 +41,21 @@ docker compose up --build
 - [Progreso](docs/PROGRESO.md)
 - [ADR 0001: stack y estructura](docs/adr/0001-stack-y-estructura.md)
 - [ADR 0002: persistencia, autenticación y autorización](docs/adr/0002-persistencia-y-autorizacion.md)
+- [ADR 0003: frontend y actualización](docs/adr/0003-frontend-y-actualizacion.md)
+- [ADR 0004: costos y valor ganado](docs/adr/0004-costos-y-valor-ganado.md)
+- [ADR 0005: exportación e importación](docs/adr/0005-exportacion-e-importacion.md)
+- [Motor de programación](docs/scheduling.md)
+- [Runbook de operación](docs/RUNBOOK.md)
+- [Revisión de seguridad](docs/SEGURIDAD.md)
+- [Checklist del piloto](docs/PILOTO.md)
+
+## Instalación rápida
+
+1. cp .env.example .env, y cambia todos los valores cambia-... (ver docs/RUNBOOK.md).
+2. docker compose up -d --build
+3. make migrate
+4. Crea el primer administrador (sección siguiente).
+5. Opcional: docker compose exec api python -m app.cli seed-demo --email <pm> crea un proyecto de ejemplo de 40 tareas.
 
 ## Primer administrador
 
