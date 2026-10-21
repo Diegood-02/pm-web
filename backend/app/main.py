@@ -12,6 +12,7 @@ from app.routers import (
     baselines,
     costs,
     dependencies,
+    exports,
     projects,
     resources,
     schedule,
@@ -64,6 +65,7 @@ for router in (
     baselines.router,
     schedule.router,
     costs.router,
+    exports.router,
     audit_router.router,
 ):
     app.include_router(router, prefix=API_PREFIX)
