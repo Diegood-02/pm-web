@@ -5,10 +5,12 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-pm}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cambia-esta-clave}
+      # Obligatorio: define POSTGRES_PASSWORD en .env (no hay valor por defecto).
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en el archivo .env}
       POSTGRES_DB: ${POSTGRES_DB:-pm_web}
     ports:
-      - "5432:5432"
+      # La base solo es accesible desde este equipo.
+      - "127.0.0.1:5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
@@ -21,9 +23,10 @@ services:
     build: ./backend
     env_file: .env
     environment:
-      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://pm:cambia-esta-clave@db:5432/pm_web}
+      DATABASE_URL: ${DATABASE_URL:?Define DATABASE_URL en el archivo .env}
     ports:
-      - "8000:8000"
+      # API_BIND=0.0.0.0 en .env la publica en la red del piloto; por defecto solo local.
+      - "${API_BIND:-127.0.0.1}:8000:8000"
     volumes:
       - ./backend:/app
     depends_on:
@@ -36,7 +39,7 @@ services:
       # El navegador llama a la API desde el host, no desde la red interna de Docker.
       VITE_API_URL: ${VITE_API_URL:-http://localhost:8000/api/v1}
     ports:
-      - "5173:5173"
+      - "${WEB_BIND:-127.0.0.1}:5173:5173"
     volumes:
       - ./frontend:/app
       - web-node-modules:/app/node_modules
