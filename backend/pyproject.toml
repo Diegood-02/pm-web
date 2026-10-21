@@ -13,6 +13,9 @@ dependencies = [
     "psycopg[binary]>=3.2",
     "argon2-cffi>=23.1",
     "pyjwt>=2.9",
+    "openpyxl>=3.1",
+    "reportlab>=4.2",
+    "jsonschema>=4.23",
 ]
 
 [project.optional-dependencies]
@@ -30,6 +33,9 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 include = ["app*"]
 
+[tool.setuptools.package-data]
+app = ["exports/*.json"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
@@ -43,6 +49,11 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
 python_version = "3.12"
 strict = true
 files = ["app", "tests"]
+
+[[tool.mypy.overrides]]
+# Estas librerías no traen tipos; se confían sus firmas documentadas.
+module = ["openpyxl", "openpyxl.*", "reportlab", "reportlab.*", "jsonschema", "jsonschema.*"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
