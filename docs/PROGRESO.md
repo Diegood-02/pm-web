@@ -8,8 +8,8 @@
 | 1 | Motor de programación (CPM) | Aprobada y publicada |
 | 2 | Backend: modelo de datos y API | Aprobada y publicada |
 | 3 | Frontend MVP | Aprobada y publicada |
-| 4 | Costos y valor ganado (EVM) | En revisión (código y pruebas listos; pendiente de commit) |
-| 5 | Reportes y exportación | Pendiente |
+| 4 | Costos y valor ganado (EVM) | Aprobada y publicada |
+| 5 | Reportes y exportación | En revisión (código y pruebas listos; pendiente de commit) |
 | 6 | Piloto y endurecimiento | Pendiente |
 
 ## Fase 0. Detalle
@@ -86,4 +86,17 @@
 - [x] Pruebas de interfaz: 5 del panel de costos; 32 en total con Vitest.
 - [x] Migraciones `201d94aaf339` y `0b0f61ca6e70` aplicadas en la base local de desarrollo.
 - [x] Decisiones en `docs/adr/0004-costos-y-valor-ganado.md`.
+- [ ] Commits propuestos y aprobados.
+
+## Fase 5. Detalle
+
+- [x] Cronograma a CSV (UTF-8 con BOM) y a XLSX (hoja con fechas reales y ruta crítica resaltada).
+- [x] Reporte PDF de resumen: fechas, ruta crítica, valor ganado y cronograma.
+- [x] Formato propio JSON `pm-web-project` versión 1 con esquema JSON Draft 2020-12.
+- [x] Importación con validación de esquema y de reglas (referencias, ciclos, hitos, zona horaria, repetidos) y respuesta 422 con todos los errores.
+- [x] Ciclo completo verificado: exportar, importar como copia y obtener el mismo cronograma.
+- [x] Pruebas: 13 de formatos, 13 de API de exportación, 36 de interfaz (incluye descarga e importación). Backend: 96 en total.
+- [x] Botones de exportación en la vista de proyecto e importación JSON en la lista de proyectos.
+- [x] Prueba de humo contra el contenedor `api` (reconstruido con las librerías nuevas).
+- [x] Decisiones en `docs/adr/0005-exportacion-e-importacion.md`.
 - [ ] Commits propuestos y aprobados.
