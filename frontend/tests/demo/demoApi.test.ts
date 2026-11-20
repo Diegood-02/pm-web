@@ -2,14 +2,16 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { demoRoute, installDemoApi } from "../../src/demo/demoApi";
 import { DEMO_READONLY_MESSAGE } from "../../src/demo/flags";
-import snapshot from "../../src/demo/snapshot.json";
+import snapshotJson from "../../src/demo/snapshot.json";
+
+const responses: Record<string, unknown> = snapshotJson.responses;
 
 describe("demoRoute", () => {
   it("devuelve los datos de ejemplo guardados para una ruta GET", async () => {
     const response = demoRoute("GET", "/projects");
 
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual(snapshot.responses["/projects"]);
+    expect(await response.json()).toEqual(responses["/projects"]);
   });
 
   it("entra con cualquier credencial y devuelve tokens de demo", async () => {
@@ -33,12 +35,12 @@ describe("demoRoute", () => {
   });
 
   it("el snapshot incluye el cronograma y el costo del proyecto de ejemplo", () => {
-    const projectIds = Object.keys(snapshot.responses).filter((key) => /^\/projects\/\d+$/.test(key));
+    const projectIds = Object.keys(responses).filter((key) => /^\/projects\/\d+$/.test(key));
     expect(projectIds).toHaveLength(1);
     const id = projectIds[0];
 
-    expect(snapshot.responses[`${id}/schedule`]).toHaveProperty("critical_path");
-    expect(snapshot.responses[`${id}/costs`]).toHaveProperty("summary");
+    expect(responses[`${id}/schedule`]).toHaveProperty("critical_path");
+    expect(responses[`${id}/costs`]).toHaveProperty("summary");
   });
 });
 
@@ -56,7 +58,7 @@ describe("installDemoApi", () => {
     const staticResponse = await window.fetch("/assets/logo.svg");
 
     expect(apiResponse.status).toBe(200);
-    expect(await apiResponse.json()).toEqual(snapshot.responses["/projects"]);
+    expect(await apiResponse.json()).toEqual(responses["/projects"]);
     expect(realFetch).toHaveBeenCalledTimes(1);
     expect(await staticResponse.text()).toBe("recurso real");
   });
