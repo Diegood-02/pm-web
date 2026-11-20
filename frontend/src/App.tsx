@@ -2,6 +2,7 @@ import { Link, Navigate, Route, Routes } from "react-router-dom";
 import type { ReactNode } from "react";
 
 import { useAuth } from "./auth/AuthContext";
+import { DEMO_ENABLED } from "./demo/flags";
 import { LoginPage } from "./pages/LoginPage";
 import { ProjectPage } from "./pages/ProjectPage";
 import { ProjectsPage } from "./pages/ProjectsPage";
@@ -28,6 +29,11 @@ function Shell({ children }: { children: ReactNode }) {
       <a className="skip-link" href="#contenido">
         Saltar al contenido
       </a>
+      {DEMO_ENABLED && (
+        <p role="status" className="demo-banner">
+          Demo de solo lectura con datos de ejemplo. Los cambios no se guardan.
+        </p>
+      )}
       <header className="app-header">
         <Link to="/" className="brand">
           PM Web

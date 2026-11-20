@@ -3,12 +3,13 @@
 from datetime import timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import select
 
 from app.config import Settings, get_settings
 from app.deps import CurrentUser, DbSession
 from app.models import User
+from app.ratelimit import login_limiter
 from app.schemas import LoginRequest, RefreshRequest, TokenPair, UserOut
 from app.security import ACCESS_TOKEN, REFRESH_TOKEN, create_token, decode_token, verify_password
 
@@ -34,10 +35,20 @@ def _issue_pair(user: User, settings: Settings) -> TokenPair:
 
 
 @router.post("/login", response_model=TokenPair)
-def login(body: LoginRequest, db: DbSession, settings: SettingsDep) -> TokenPair:
+def login(body: LoginRequest, request: Request, db: DbSession, settings: SettingsDep) -> TokenPair:
+    client = request.client.host if request.client else "desconocido"
+    key = f"{body.email.lower()}|{client}"
+    window = settings.login_window_minutes * 60
+    if login_limiter.is_blocked(key, settings.login_max_failures, window):
+        raise HTTPException(
+            status.HTTP_429_TOO_MANY_REQUESTS,
+            "Demasiados intentos fallidos. Espera unos minutos e inténtalo de nuevo.",
+        )
     user = db.scalar(select(User).where(User.email == body.email.lower()))
     if user is None or not user.is_active or not verify_password(user.password_hash, body.password):
+        login_limiter.record_failure(key, window)
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Correo o contraseña incorrectos")
+    login_limiter.clear(key)
     return _issue_pair(user, settings)
 
 

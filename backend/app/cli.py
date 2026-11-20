@@ -14,6 +14,7 @@ from sqlalchemy import select
 from app.db import SessionLocal
 from app.models import Role, User
 from app.security import hash_password
+from app.seed import seed_demo_project
 
 
 def create_admin(email: str, full_name: str, password: str) -> int:
@@ -34,13 +35,31 @@ def create_admin(email: str, full_name: str, password: str) -> int:
     return 0
 
 
+def seed_demo(email: str) -> int:
+    with SessionLocal() as session:
+        owner = session.scalar(select(User).where(User.email == email.lower()))
+        if owner is None:
+            print("No existe un usuario con ese correo.", file=sys.stderr)
+            return 1
+        project = seed_demo_project(session, owner)
+        print(f"Proyecto de ejemplo creado con id {project.id}: {project.name}")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(prog="app.cli")
     subparsers = parser.add_subparsers(dest="command", required=True)
     admin = subparsers.add_parser("create-admin", help="Crea el primer usuario administrador")
     admin.add_argument("--email", required=True)
     admin.add_argument("--name", required=True, dest="full_name")
+    demo = subparsers.add_parser("seed-demo", help="Crea el proyecto de ejemplo de 40 tareas")
+    demo.add_argument(
+        "--email", required=True, help="Correo del project manager que será dueño del proyecto"
+    )
     args = parser.parse_args()
+
+    if args.command == "seed-demo":
+        return seed_demo(args.email)
 
     if args.command == "create-admin":
         password = getpass.getpass("Contraseña (mínimo 12 caracteres): ")
