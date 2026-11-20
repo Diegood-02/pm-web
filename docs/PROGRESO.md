@@ -10,7 +10,7 @@
 | 3 | Frontend MVP | Aprobada y publicada |
 | 4 | Costos y valor ganado (EVM) | Aprobada y publicada |
 | 5 | Reportes y exportación | Aprobada y publicada |
-| 6 | Piloto y endurecimiento | En revisión (código y pruebas listos; pendiente de commit) |
+| 6 | Piloto y endurecimiento | Código publicado; piloto pendiente de ejecutar |
 
 ## Fase 0. Detalle
 
@@ -72,8 +72,8 @@
 - [x] `tsc`, ESLint, Prettier y build de producción sin errores.
 - [x] Decisiones en `docs/adr/0003-frontend-y-actualizacion.md`.
 - [x] Docker Compose con el frontend verificado: `web` sirve la app (HTTP 200) con las dependencias nuevas.
-- [ ] Vulnerabilidades de herramientas de desarrollo (`npm audit`): pendiente de decisión.
-- [ ] Commits propuestos y aprobados.
+- [x] Vulnerabilidades de herramientas de desarrollo: 14 reducidas a 7 moderadas (ver `docs/SEGURIDAD.md`).
+- [x] Commits aprobados y publicados en `feature/mvp-pm-web`.
 
 ## Fase 4. Detalle
 
@@ -86,7 +86,7 @@
 - [x] Pruebas de interfaz: 5 del panel de costos; 32 en total con Vitest.
 - [x] Migraciones `201d94aaf339` y `0b0f61ca6e70` aplicadas en la base local de desarrollo.
 - [x] Decisiones en `docs/adr/0004-costos-y-valor-ganado.md`.
-- [ ] Commits propuestos y aprobados.
+- [x] Commits aprobados y publicados en `feature/mvp-pm-web`.
 
 ## Fase 5. Detalle
 
@@ -99,7 +99,7 @@
 - [x] Botones de exportación en la vista de proyecto e importación JSON en la lista de proyectos.
 - [x] Prueba de humo contra el contenedor `api` (reconstruido con las librerías nuevas).
 - [x] Decisiones en `docs/adr/0005-exportacion-e-importacion.md`.
-- [ ] Commits propuestos y aprobados.
+- [x] Commits aprobados y publicados en `feature/mvp-pm-web`.
 
 ## Fase 6. Detalle
 
@@ -113,5 +113,5 @@
 - [x] `docs/RUNBOOK.md` (operación), `docs/SEGURIDAD.md` (riesgos aceptados y pendientes) y `docs/PILOTO.md` (checklist y registro de hallazgos).
 - [x] README con instalación rápida, enlaces y comandos.
 - [x] Prueba de humo: `health/ready`, cabeceras y `seed-demo` (40 tareas) en el contenedor.
-- [ ] Piloto con el equipo (dos semanas, según `docs/PILOTO.md`).
-- [ ] Commits propuestos y aprobados.
+- [ ] Piloto con el equipo (dos semanas, según `docs/PILOTO.md`). Pendiente de ejecutar.
+- [x] Commits aprobados y publicados en `feature/mvp-pm-web`.

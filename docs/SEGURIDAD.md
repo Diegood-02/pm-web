@@ -30,7 +30,7 @@ Fecha: 2026-10-20. Alcance: backend, base de datos, contenedores y frontend, par
 3. **Contador de login en memoria.** Funciona con un solo proceso de API. Con varios procesos, el límite se multiplica.
 4. **Sin cambio obligatorio de contraseña temporal.** Un admin define la contraseña inicial de cada usuario y no hay pantalla de restablecimiento. Pendiente.
 5. **La documentación interactiva (`/docs`) está activa.** Expone la lista de endpoints, sin datos. Para producción conviene desactivarla.
-6. **Vulnerabilidades en herramientas de desarrollo del frontend** (`npm audit`: Vitest, Vite, ESLint). No están en el bundle de producción, pero el servidor de desarrollo de Vite queda expuesto si `WEB_BIND` no es local. Pendiente de actualización mayor.
+6. **Vulnerabilidades en herramientas de desarrollo del frontend.** Se actualizaron Vite a 5.4.21 y, después, a 8.3.6, Vitest a 5.1.0 y @vitejs/plugin-react a 6.1.2 (las versiones elegidas tienen al menos dos semanas de publicadas). Quedan 7 avisos moderados de `typescript-eslint` y `minimatch`: su corrección está en typescript-eslint 8.73.0, publicada el 16 de noviembre de 2026. Se actualiza el 30 de noviembre. Ninguna afecta al bundle de producción.
 
 ## Pendientes antes de producción
 
