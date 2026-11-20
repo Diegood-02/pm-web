@@ -115,3 +115,10 @@
 - [x] Prueba de humo: `health/ready`, cabeceras y `seed-demo` (40 tareas) en el contenedor.
 - [ ] Piloto con el equipo (dos semanas, según `docs/PILOTO.md`). Pendiente de ejecutar.
 - [x] Commits aprobados y publicados en `feature/mvp-pm-web`.
+
+## Demo en GitHub Pages
+
+- [x] Modo demo de solo lectura con datos de ejemplo reales (snapshot desde la API).
+- [x] Workflow `.github/workflows/pages.yml` con pruebas y publicación.
+- [x] Documentación en `docs/DEMO-GITHUB-PAGES.md`.
+- [ ] Despliegue verificado en https://diegood-02.github.io/pm-web/.

@@ -2,6 +2,8 @@
 
 Aplicación web multiusuario de gestión de proyectos para equipos, enfocada en el rol de Project Manager y en buenas prácticas del PMBOK.
 
+Demo de solo lectura: https://diegood-02.github.io/pm-web/ (ver docs/DEMO-GITHUB-PAGES.md).
+
 Estado: **Fase 6 (piloto y endurecimiento)**. Ver [docs/PROGRESO.md](docs/PROGRESO.md).
 
 ## Stack
@@ -48,6 +50,7 @@ docker compose up --build
 - [Runbook de operación](docs/RUNBOOK.md)
 - [Revisión de seguridad](docs/SEGURIDAD.md)
 - [Checklist del piloto](docs/PILOTO.md)
+- [Demo en GitHub Pages](docs/DEMO-GITHUB-PAGES.md)
 
 ## Instalación rápida
 
