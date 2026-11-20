@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { ApiError, downloadFile } from "../api/client";
 import { api } from "../api/endpoints";
 import { useAuth } from "../auth/AuthContext";
+import { DEMO_ENABLED } from "../demo/flags";
 import { BaselinePanel } from "../components/BaselinePanel";
 import { CostsPanel } from "../components/CostsPanel";
 import { DependenciesPanel } from "../components/DependenciesPanel";
@@ -93,43 +94,48 @@ export function ProjectPage() {
         </p>
       </header>
 
-      <div className="export-bar" role="group" aria-label="Exportar proyecto">
-        <button
-          type="button"
-          onClick={() =>
-            exportFile(`/projects/${projectId}/export/schedule.csv`, `cronograma-${projectId}.csv`)
-          }
-        >
-          Exportar CSV
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            exportFile(
-              `/projects/${projectId}/export/schedule.xlsx`,
-              `cronograma-${projectId}.xlsx`,
-            )
-          }
-        >
-          Exportar XLSX
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            exportFile(`/projects/${projectId}/export/summary.pdf`, `resumen-${projectId}.pdf`)
-          }
-        >
-          Resumen PDF
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            exportFile(`/projects/${projectId}/export/project.json`, `proyecto-${projectId}.json`)
-          }
-        >
-          Exportar JSON
-        </button>
-      </div>
+      {!DEMO_ENABLED && (
+        <div className="export-bar" role="group" aria-label="Exportar proyecto">
+          <button
+            type="button"
+            onClick={() =>
+              exportFile(
+                `/projects/${projectId}/export/schedule.csv`,
+                `cronograma-${projectId}.csv`,
+              )
+            }
+          >
+            Exportar CSV
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              exportFile(
+                `/projects/${projectId}/export/schedule.xlsx`,
+                `cronograma-${projectId}.xlsx`,
+              )
+            }
+          >
+            Exportar XLSX
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              exportFile(`/projects/${projectId}/export/summary.pdf`, `resumen-${projectId}.pdf`)
+            }
+          >
+            Resumen PDF
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              exportFile(`/projects/${projectId}/export/project.json`, `proyecto-${projectId}.json`)
+            }
+          >
+            Exportar JSON
+          </button>
+        </div>
+      )}
 
       {error && (
         <p role="alert" className="error">

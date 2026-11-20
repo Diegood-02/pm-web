@@ -4,6 +4,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 import { ApiError } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
+import { DEMO_ENABLED } from "../demo/flags";
 
 export function LoginPage() {
   const { user, login } = useAuth();
@@ -36,6 +37,7 @@ export function LoginPage() {
   return (
     <main className="login">
       <h1>Iniciar sesión</h1>
+      {DEMO_ENABLED && <p className="muted">Demo: cualquier correo y contraseña entran.</p>}
       <form onSubmit={handleSubmit} noValidate>
         <div className="field">
           <label htmlFor="email">Correo electrónico</label>

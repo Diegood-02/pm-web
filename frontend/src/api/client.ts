@@ -1,7 +1,7 @@
 // Cliente HTTP para la API. Guarda los tokens solo en sessionStorage (por pestaña)
 // y renueva el token de acceso una vez cuando la API responde 401.
 
-const API_BASE: string = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api/v1";
+export const API_BASE: string = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api/v1";
 const TOKEN_KEY = "pm-web.tokens";
 
 export class ApiError extends Error {
